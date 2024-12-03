@@ -207,7 +207,7 @@ def extract_features_v0(url):
         features['NoOfiFrame'] = no_of_iframes(soup),
         features['ObfuscationRatio'] = obfuscation_ratio(html),
         features['DomainTitleMatchScore'] = domain_title_match_score(domain, title),
-        features['URLCharProb'] = url_char_prob(url),
+        features['URLCharProb'] = 0.5, # Placeholder value
         features['NoOfURLRedirect'] = no_of_url_redirects(response),
         features['HasSubmitButton'] = has_submit_button(soup),
         features['HasExternalFormSubmit'] = has_external_form_submit(soup, domain),
@@ -227,7 +227,7 @@ def extract_features(url):
 
     # Basic URL features
     features['URLLength'] = len(url)
-    features['Domain'] = domain_info.domain
+    # features['Domain'] = domain_info.domain
     features['DomainLength'] = len(domain_info.domain)
     features['IsDomainIP'] = 1 if re.match(r'^\d{1,3}(\.\d{1,3}){3}$', domain_info.domain) else 0
     features['TLD'] = domain_info.suffix
@@ -259,8 +259,8 @@ def extract_features(url):
     # URL similarity and continuation
     features['URLSimilarityIndex'] = similarity_score(domain_info.domain, parsed_url.path)
     features['CharContinuationRate'] = char_continuation_rate(url)
-    features['URLCharProb'] = url_char_prob(url)
-    features['TLDLegitimateProb'] = 0.5  # Placeholder - could be implemented with a TLD legitimacy database
+    features['URLCharProb'] = 0.9 # Placeholder - could be implemented
+    features['TLDLegitimateProb'] = 0.9  # Placeholder - could be implemented with a TLD legitimacy database
 
     html = fetch_url_content(url)
     if html is None:
@@ -273,7 +273,7 @@ def extract_features(url):
         response = requests.get(url)
 
         # HTML content features
-        features['LineOfCode'] = len(lines)
+        # features['LineOfCode'] = len(lines)
         features['LargestLineLength'] = max(len(line) for line in lines)
         features['HasTitle'] = 1 if soup.title else 0
         features['DomainTitleMatchScore'] = domain_title_match_score(domain, title)
@@ -286,15 +286,15 @@ def extract_features(url):
         features['HasDescription'] = 1 if soup.find('meta', {'name': 'description'}) else 0
 
         # Resource counts
-        features['NoOfImage'] = len(soup.find_all('img'))
+        # features['NoOfImage'] = len(soup.find_all('img'))
         features['NoOfCSS'] = len(soup.find_all('link', {'rel': 'stylesheet'}))
-        features['NoOfJS'] = len(soup.find_all('script'))
+        # features['NoOfJS'] = len(soup.find_all('script'))
 
         # Link analysis
         all_links = soup.find_all('a')
         features['NoOfSelfRef'] = sum(1 for link in all_links if url in link.get('href', ''))
         features['NoOfEmptyRef'] = sum(1 for link in all_links if link.get('href') == '#')
-        features['NoOfExternalRef'] = len(all_links) - features['NoOfSelfRef'] - features['NoOfEmptyRef']
+        # features['NoOfExternalRef'] = len(all_links) - features['NoOfSelfRef'] - features['NoOfEmptyRef']
 
         # Security features
         features['NoOfURLRedirect'] = len(response.history)
@@ -332,11 +332,3 @@ def process_urls(urls):
             except Exception as e:
                 print(f"Error processing {url}: {e}")
     return results
-
-# Example usage
-urls = [
-    'http://01anjali2001.github.io/netflix',
-    'http://kscre.org/core/wp-content/ca/wellsfargo.html',
-    'https://deepnote.com/workspace/indian-institute-of-science-abf6-071b3449-3099-4b31-8013-027aa3cc57c1/integrations'
-]
-features_list = process_urls(urls)
