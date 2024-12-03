@@ -8,3 +8,4 @@ scikit-learn
 joblib
 tldextract
 dnspython
+flask
