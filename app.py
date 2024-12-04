@@ -8,12 +8,12 @@ from extract_features import process_urls
 app = Flask(__name__)
 
 # Load the trained model
-model_path = 'models/rf_model_phiusiil_v2.pkl'
+model_path = 'models/rf_model_phiusiil_v3.1.pkl'
 best_rf_model = joblib.load(model_path)
 
 # Load training feature template for alignment
-required_features = ['URLLength', 'DomainLength', 'IsDomainIP', 'TLD', 'CharContinuationRate', 'TLDLegitimateProb', 'URLCharProb', 'TLDLength', 'NoOfSubDomain', 'HasObfuscation', 'NoOfObfuscatedChar', 'ObfuscationRatio', 'NoOfLettersInURL', 'LetterRatioInURL', 'NoOfDegitsInURL', 'DegitRatioInURL', 'NoOfEqualsInURL', 'NoOfQMarkInURL', 'NoOfAmpersandInURL', 'NoOfOtherSpecialCharsInURL', 'SpacialCharRatioInURL', 'IsHTTPS', 'LargestLineLength', 'HasTitle', 'DomainTitleMatchScore', 'URLTitleMatchScore', 'HasFavicon', 'Robots', 'IsResponsive', 'NoOfURLRedirect', 'NoOfSelfRedirect', 'HasDescription', 'NoOfPopup', 'NoOfiFrame', 'HasExternalFormSubmit', 'HasSocialNet', 'HasSubmitButton', 'HasHiddenFields', 'HasPasswordField', 'Bank', 'Pay', 'Crypto', 'HasCopyrightInfo', 'NoOfCSS', 'NoOfSelfRef', 'NoOfEmptyRef']
-
+# required_features = ['URLLength', 'DomainLength', 'IsDomainIP', 'TLD', 'TLDLength', 'NoOfSubDomain', 'IsHTTPS', 'NoOfLettersInURL', 'NoOfDegitsInURL', 'NoOfEqualsInURL', 'NoOfQMarkInURL', 'NoOfAmpersandInURL', 'NoOfOtherSpecialCharsInURL', 'LetterRatioInURL', 'DegitRatioInURL', 'SpacialCharRatioInURL', 'HasObfuscation', 'NoOfObfuscatedChar', 'ObfuscationRatio', 'URLSimilarityIndex', 'CharContinuationRate']
+required_features = ["URLLength", "DomainLength", "IsDomainIP", "TLD", "TLDLength", "NoOfSubDomain", "IsHTTPS", "NoOfLettersInURL", "NoOfDegitsInURL", "NoOfEqualsInURL", "NoOfQMarkInURL", "NoOfAmpersandInURL", "NoOfOtherSpecialCharsInURL", "LetterRatioInURL", "DegitRatioInURL", "SpacialCharRatioInURL", "HasObfuscation", "NoOfObfuscatedChar", "ObfuscationRatio", "URLSimilarityIndex", "CharContinuationRate", "URLCharProb", "TLDLegitimateProb"]
 # Create a function to prepare features for prediction
 def prepare_features(input_features, required_features):
     full_features = {feature: input_features.get(feature, 0) for feature in required_features}
